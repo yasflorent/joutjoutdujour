@@ -577,13 +577,21 @@
             // Adicione mais vídeos aqui com o formato {id: 'youtube_video_id', title: 'Título do Vídeo'}
         ];
 
+        // Função para obter um número fixo para cada dia do ano
+        function getDailyIndex(seed, max) {
+            let hash = seed.split("").reduce((acc, char) => acc + char.charCodeAt(0), 0);
+            return hash % max;
+        }
+
+        
         // Função para gerar um vídeo aleatório com base na data do dia
         function getRandomVideo() {
-            const date = new Date();
-            const day = date.getDate();
-            const randomIndex = day % videos.length; // Gera um índice baseado no dia do mês
+            const now = new Date();
+            const dayOfYear = Math.floor((now - new Date(now.getFullYear(), 0, 0)) / 86400000); 
+            const randomIndex = getDailyIndex(`${now.getFullYear()}-${dayOfYear}`, videos.length);
             return videos[randomIndex];
         }
+
 
         // Definir o vídeo na página
         const video = getRandomVideo();
